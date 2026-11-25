@@ -1,120 +1,490 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adın Soyadın — Portfolyo</title>
-    <script src="https://tailwindcss.com"></script>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #09090b; color: #fafafa; }
-        .bento-card { background-color: #18181b; border: 1px solid #27272a; transition: all 0.3s ease; }
-        .bento-card:hover { border-color: #52525b; transform: translateY(-2px); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad Soyad — Grafik Tasarımcı</title>
+<meta name="description" content="Ad Soyad grafik tasarım portfolyosu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf9f7; --surface:#ffffff; --text:#18181b; --muted:#71717a; --border:#e7e5e4;
+  --accent:#e4572e; --accent2:#f59e0b; --glow:rgba(228,87,46,.13); --radius:18px;
+  --shadow:0 14px 34px -14px rgba(24,24,27,.18);
+}
+[data-theme="dark"]{
+  --bg:#0c0b0a; --surface:#161513; --text:#f5f4f2; --muted:#a1a1aa; --border:#272522;
+  --accent:#ff7a4d; --accent2:#fbbf24; --glow:rgba(255,122,77,.14);
+  --shadow:0 14px 34px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.container{width:min(1120px,100% - 40px);margin-inline:auto}
+section{padding:96px 0}
+.serif{font-family:'Fraunces',Georgia,serif;font-weight:600;letter-spacing:-.02em}
+.grad{background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:200}
+#glow{position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,var(--glow),transparent 65%);transform:translate(-50%,-50%);z-index:0}
+main,header,footer{position:relative;z-index:1}
+
+header{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--border)}
+nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-size:1.25rem}
+.logo span{color:var(--accent)}
+.links{display:flex;gap:6px;align-items:center}
+.links a{padding:8px 14px;border-radius:999px;font-size:.92rem;color:var(--muted);transition:.2s}
+.links a:hover,.links a.active{color:var(--text);background:var(--surface);box-shadow:0 0 0 1px var(--border)}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:1.1rem;transition:.2s}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.burger{display:none}
+
+/* hero */
+.hero{padding:90px 0 70px;min-height:88vh;display:flex;align-items:center}
+.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:56px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--border);background:var(--surface);border-radius:999px;font-size:.85rem;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}}
+h1{font-size:clamp(2.5rem,6.2vw,4.6rem);line-height:1.04;margin:22px 0 16px}
+.typing{font-size:clamp(1.1rem,2.4vw,1.45rem);font-weight:600;min-height:2em}
+.cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:3px;vertical-align:middle;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.lead{color:var(--muted);max-width:520px;margin:12px 0 30px;font-size:1.05rem}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:12px;font-weight:600;font-size:.95rem;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:.25s;font-family:inherit;color:var(--text)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn.primary{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;border:none}
+
+/* fotoğraf alanları */
+.photo{position:relative;overflow:hidden;background:var(--surface);cursor:pointer}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;transition:transform .6s}
+.photo.has img{display:block}
+.photo .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:.82rem;text-align:center;padding:14px;
+  background:repeating-linear-gradient(135deg,transparent 0 12px,color-mix(in srgb,var(--border) 55%,transparent) 12px 13px);border:1.5px dashed var(--border);border-radius:inherit;transition:.25s}
+.photo .ph svg{font-size:1.8rem;color:var(--accent)}
+.photo .ph b{color:var(--text);font-weight:600}
+.photo .ph small{opacity:.8}
+.photo.has .ph{display:none}
+.photo:not(.has):hover .ph{border-color:var(--accent);color:var(--text)}
+.portrait{aspect-ratio:4/5;border-radius:28px;box-shadow:var(--shadow);transform:rotate(2deg);transition:.4s}
+.portrait:hover{transform:rotate(0)}
+
+/* titles */
+.eyebrow{color:var(--accent);font-weight:600;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase}
+h2{font-size:clamp(1.9rem,4vw,2.8rem);margin:8px 0 40px;line-height:1.15}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px}
+.about p{color:var(--muted);margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center}
+.stat b{display:block;font-size:2.2rem;font-weight:800;letter-spacing:-.03em}
+.stat span{color:var(--muted);font-size:.9rem}
+
+/* services */
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.service{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:.3s}
+.service:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:var(--shadow)}
+.service .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));margin-bottom:18px}
+.service h3{font-size:1.1rem;margin-bottom:6px}
+.service p{color:var(--muted);font-size:.92rem}
+
+/* tools */
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 40px}
+.skill .row{display:flex;justify-content:space-between;font-weight:600;font-size:.95rem;margin-bottom:8px}
+.skill .row span{color:var(--muted);font-weight:500}
+.bar{height:8px;border-radius:99px;background:var(--border);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.palette{display:flex;gap:10px;margin-top:36px;align-items:center;flex-wrap:wrap}
+.palette small{color:var(--muted);margin-right:6px}
+.swatch{width:38px;height:38px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--border);cursor:pointer;transition:.2s;position:relative}
+.swatch:hover{transform:scale(1.18)}
+
+/* works */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:-16px 0 28px}
+.filter{padding:8px 18px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-family:inherit;font-size:.9rem;transition:.2s}
+.filter.active,.filter:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.works{columns:3;column-gap:22px}
+.work{break-inside:avoid;margin-bottom:22px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);overflow:hidden;transition:.3s}
+.work:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.work .photo{border-radius:0}
+.work .photo.has:hover img{transform:scale(1.05)}
+.r-sq{aspect-ratio:1}.r-tall{aspect-ratio:4/5}.r-wide{aspect-ratio:16/11}.r-poster{aspect-ratio:3/4}
+.work .info{padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.work h3{font-size:1rem}
+.work small{color:var(--muted);font-size:.8rem}
+.work .go{color:var(--muted);transition:.2s}
+.work:hover .go{color:var(--accent);transform:translate(2px,-2px)}
+.work.hide{display:none}
+
+/* lightbox */
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:400;padding:30px;cursor:zoom-out}
+#lb.open{display:flex}
+#lb img{max-width:100%;max-height:90vh;border-radius:12px}
+
+/* timeline */
+.timeline{border-left:2px solid var(--border);margin-left:8px;padding-left:28px}
+.item{position:relative;margin-bottom:34px}
+.item::before{content:"";position:absolute;left:-37px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--accent)}
+.item small{color:var(--accent);font-weight:600}
+.item h3{font-size:1.1rem;margin:2px 0}
+.item p{color:var(--muted);font-size:.95rem}
+
+/* contact */
+.contact-box{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:48px;display:grid;grid-template-columns:1fr 1.1fr;gap:40px}
+.contact-box p{color:var(--muted);margin:10px 0 24px}
+.socials{display:flex;gap:10px;flex-wrap:wrap}
+form{display:grid;gap:14px}
+input,textarea{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:.95rem;outline:none;transition:.2s}
+input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
+textarea{min-height:120px;resize:vertical}
+footer{border-top:1px solid var(--border);padding:28px 0;text-align:center;color:var(--muted);font-size:.9rem}
+
+#toast{position:fixed;bottom:30px;left:50%;transform:translate(-50%,30px);background:var(--text);color:var(--bg);padding:12px 22px;border-radius:12px;opacity:0;transition:.4s;z-index:500;font-size:.92rem}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#top{position:fixed;right:22px;bottom:22px;opacity:0;pointer-events:none;transition:.3s;z-index:150}
+#top.show{opacity:1;pointer-events:auto}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero-grid,.about-grid,.contact-box{grid-template-columns:1fr}
+  .portrait{max-width:300px;order:-1}
+  .services{grid-template-columns:1fr 1fr}
+  .skills{grid-template-columns:1fr}
+  .works{columns:2}
+  .contact-box{padding:28px}
+  .burger{display:grid}
+  .links{position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--border);padding:12px;display:none}
+  .links.open{display:flex}
+}
+@media(max-width:560px){.services{grid-template-columns:1fr}.works{columns:1}section{padding:72px 0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
 </head>
-<body class="min-h-screen p-4 md:p-10 flex flex-col items-center justify-center">
+<body>
+<div id="progress"></div>
+<div id="glow"></div>
 
-    <main class="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        <!-- 1. KART: Kişisel Tanıtım (2 Sütun Genişliğinde) -->
-        <div class="bento-card rounded-3xl p-8 md:col-span-2 flex flex-col justify-between">
-            <div>
-                <span class="inline-block px-3 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 mb-4">
-                    ● Yeni Projelere Açık
-                </span>
-                <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                    Merhaba, ben <span class="text-indigo-400">Adın Soyadın</span>.
-                </h1>
-                <p class="text-zinc-400 text-base md:text-lg leading-relaxed">
-                    Buraya mesleğini ve ne yaptığını anlatan kısa bir cümle yaz. Örneğin: Kullanıcı odaklı dijital deneyimler tasarlayan ve modern web arayüzleri geliştiren bir tasarımcıyım.
-                </p>
-            </div>
-            <div class="mt-8 flex flex-wrap gap-3">
-                <a href="mailto:ornek@email.com" class="px-5 py-2.5 bg-white text-black font-semibold rounded-xl hover:bg-zinc-200 transition text-sm">
-                    İletişime Geç
-                </a>
-                <a href="#projeler" class="px-5 py-2.5 bg-zinc-800 text-white font-medium rounded-xl hover:bg-zinc-700 transition text-sm">
-                    Projelerimi Gör
-                </a>
-            </div>
+<!-- Sembol tanımları -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="m12 19 7-7 3 3-7 7-3-3ZM18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5ZM2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+</svg>
+
+<header>
+  <nav class="container">
+    <a href="#home" class="logo serif">ad<span>.</span>soyad</a>
+    <div class="links" id="links">
+      <a href="#home" class="active">Ana Sayfa</a>
+      <a href="#about">Hakkımda</a>
+      <a href="#services">Hizmetler</a>
+      <a href="#works">Çalışmalar</a>
+      <a href="#journey">Yolculuk</a>
+      <a href="#contact">İletişim</a>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="icon-btn" id="theme" aria-label="Temayı değiştir"><svg><use href="#i-moon"/></svg></button>
+      <button class="icon-btn burger" id="burger" aria-label="Menü"><svg><use href="#i-menu"/></svg></button>
+    </div>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge"><i class="dot"></i> Yeni projelere açığım</span>
+      <h1 class="serif">Fikirleri <span class="grad">görsel</span> bir dile çeviriyorum</h1>
+      <div class="typing"><span id="type"></span><span class="cursor"></span></div>
+      <p class="lead">Merhaba, ben Ad Soyad. Markalara kimlik kazandıran logo, afiş, ambalaj ve dijital tasarımlar üreten bir grafik tasarımcıyım.</p>
+      <div class="btns">
+        <a href="#works" class="btn primary">Çalışmalarım</a>
+        <a href="#contact" class="btn">İletişime Geç</a>
+      </div>
+    </div>
+    <!-- PROFİL FOTOĞRAFI: images/profil.jpg -->
+    <div class="photo portrait reveal" data-file="images/profil.jpg" data-label="Profil fotoğrafı">
+      <img alt="Ad Soyad portre">
+      <div class="ph"><svg><use href="#i-img"/></svg><b>Profil fotoğrafı ekle</b><small>Tıkla ve seç</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container about-grid">
+    <div class="reveal">
+      <div class="eyebrow">Hakkımda</div>
+      <h2 class="serif">Sade, güçlü ve akılda kalan tasarımlar</h2>
+      <p>Marka kimliği, basılı ve dijital tasarım alanlarında çalışıyorum. Her projede amacım; markanın hikâyesini doğru tipografi, renk ve kompozisyonla görünür kılmak.</p>
+      <p>Çizim defterim hiç boş kalmaz. Yeni fontlar, afişler ve renk paletleri keşfetmek en büyük ilham kaynağım.</p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><b data-count="5" data-suffix="+">0</b><span>Yıl Deneyim</span></div>
+      <div class="stat"><b data-count="120" data-suffix="+">0</b><span>Tamamlanan Proje</span></div>
+      <div class="stat"><b data-count="40" data-suffix="+">0</b><span>Marka</span></div>
+      <div class="stat"><b data-count="100" data-suffix="%">0</b><span>Tutku</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Hizmetler</div>
+      <h2 class="serif">Neler yapıyorum</h2>
+    </div>
+    <div class="services">
+      <div class="service reveal"><div class="ic"><svg><use href="#i-pen"/></svg></div><h3>Logo & Marka Kimliği</h3><p>Logo, renk paleti, tipografi ve marka rehberi tasarımı.</p></div>
+      <div class="service reveal"><div class="ic"><svg><use href="#i-layout"/></svg></div><h3>Afiş & Basılı Tasarım</h3><p>Poster, broşür, katalog, kartvizit ve dergi düzenleri.</p></div>
+      <div class="service reveal"><div class="ic"><svg><use href="#i-box"/></svg></div><h3>Ambalaj Tasarımı</h3><p>Ürünü raftan seçtiren, dikkat çekici ambalaj çalışmaları.</p></div>
+      <div class="service reveal"><div class="ic"><svg><use href="#i-share"/></svg></div><h3>Sosyal Medya</h3><p>Marka dilinize uygun post, hikâye ve kapak tasarımları.</p></div>
+      <div class="service reveal"><div class="ic"><svg><use href="#i-type"/></svg></div><h3>Tipografi & İllüstrasyon</h3><p>Özel harf çalışmaları ve el yapımı illüstrasyonlar.</p></div>
+      <div class="service reveal"><div class="ic"><svg><use href="#i-phone"/></svg></div><h3>Dijital & UI</h3><p>Web ve mobil için arayüz görselleri ve tasarım sistemleri.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Araçlar</div>
+      <h2 class="serif">Çalışma masam</h2>
+    </div>
+    <div class="skills reveal">
+      <div class="skill"><div class="row">Adobe Illustrator <span>95%</span></div><div class="bar"><i data-w="95"></i></div></div>
+      <div class="skill"><div class="row">Adobe Photoshop <span>92%</span></div><div class="bar"><i data-w="92"></i></div></div>
+      <div class="skill"><div class="row">Adobe InDesign <span>85%</span></div><div class="bar"><i data-w="85"></i></div></div>
+      <div class="skill"><div class="row">Figma <span>80%</span></div><div class="bar"><i data-w="80"></i></div></div>
+      <div class="skill"><div class="row">After Effects <span>65%</span></div><div class="bar"><i data-w="65"></i></div></div>
+      <div class="skill"><div class="row">Tipografi & Kompozisyon <span>90%</span></div><div class="bar"><i data-w="90"></i></div></div>
+    </div>
+    <div class="palette reveal">
+      <small>Favori paletim (kopyalamak için tıkla):</small>
+      <span class="swatch" style="background:#e4572e" data-hex="#E4572E" title="#E4572E"></span>
+      <span class="swatch" style="background:#f59e0b" data-hex="#F59E0B" title="#F59E0B"></span>
+      <span class="swatch" style="background:#17bebb" data-hex="#17BEBB" title="#17BEBB"></span>
+      <span class="swatch" style="background:#2e4057" data-hex="#2E4057" title="#2E4057"></span>
+      <span class="swatch" style="background:#f4f1ea" data-hex="#F4F1EA" title="#F4F1EA"></span>
+    </div>
+  </div>
+</section>
+
+<section id="works">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Çalışmalar</div>
+      <h2 class="serif">Seçili işlerim</h2>
+    </div>
+    <div class="filters reveal">
+      <button class="filter active" data-f="all">Tümü</button>
+      <button class="filter" data-f="logo">Logo & Marka</button>
+      <button class="filter" data-f="poster">Afiş</button>
+      <button class="filter" data-f="ambalaj">Ambalaj</button>
+      <button class="filter" data-f="sosyal">Sosyal Medya</button>
+    </div>
+
+    <!-- Her kartın "data-file" değerine kendi fotoğraf yolunu yazabilirsin -->
+    <div class="works">
+      <article class="work" data-c="logo">
+        <div class="photo r-sq" data-file="images/proje-1.jpg" data-label="Kapak fotoğrafı"><img alt="Marka kimliği çalışması"><div class="ph"><svg><use href="#i-img"/></svg><b>Kapak fotoğrafı ekle</b><small>1:1 kare önerilir</small></div></div>
+        <div class="info"><div><h3>Kafe Marka Kimliği</h3><small>Logo & Marka</small></div><span class="go"><svg><use href="#i-arrow"/></svg></span></div>
+      </article>
+      <article class="work" data-c="poster">
+        <div class="photo r-poster" data-file="images/proje-2.jpg" data-label="Kapak fotoğrafı"><img alt="Afiş çalışması"><div class="ph"><svg><use href="#i-img"/></svg><b>Kapak fotoğrafı ekle</b><small>3:4 dikey önerilir</small></div></div>
+        <div class="info"><div><h3>Müzik Festivali Afişi</h3><small>Afiş</small></div><span class="go"><svg><use href="#i-arrow"/></svg></span></div>
+      </article>
+      <article class="work" data-c="ambalaj">
+        <div class="photo r-wide" data-file="images/proje-3.jpg" data-label="Kapak fotoğrafı"><img alt="Ambalaj çalışması"><div class="ph"><svg><use href="#i-img"/></svg><b>Kapak fotoğrafı ekle</b><small>16:11 yatay önerilir</small></div></div>
+        <div class="info"><div><h3>Organik Çay Ambalajı</h3><small>Ambalaj</small></div><span class="go"><svg><use href="#i-arrow"/></svg></span></div>
+      </article>
+      <article class="work" data-c="sosyal">
+        <div class="photo r-tall" data-file="images/proje-4.jpg" data-label="Kapak fotoğrafı"><img alt="Sosyal medya çalışması"><div class="ph"><svg><use href="#i-img"/></svg><b>Kapak fotoğrafı ekle</b><small>4:5 dikey önerilir</small></div></div>
+        <div class="info"><div><h3>Sosyal Medya Seti</h3><small>Sosyal Medya</small></div><span class="go"><svg><use href="#i-arrow"/></svg></span></div>
+      </article>
+      <article class="work" data-c="logo">
+        <div class="photo r-wide" data-file="images/proje-5.jpg" data-label="Kapak fotoğrafı"><img alt="Logo çalışması"><div class="ph"><svg><use href="#i-img"/></svg><b>Kapak fotoğrafı ekle</b><small>16:11 yatay önerilir</small></div></div>
+        <div class="info"><div><h3>Mimarlık Ofisi Logosu</h3><small>Logo & Marka</small></div><span class="go"><svg><use href="#i-arrow"/></svg></span></div>
+      </article>
+      <article class="work" data-c="poster">
+        <div class="photo r-sq" data-file="images/proje-6.jpg" data-label="Kapak fotoğrafı"><img alt="Afiş çalışması"><div class="ph"><svg><use href="#i-img"/></svg><b>Kapak fotoğrafı ekle</b><small>1:1 kare önerilir</small></div></div>
+        <div class="info"><div><h3>Sergi Görsel Dizisi</h3><small>Afiş</small></div><span class="go"><svg><use href="#i-arrow"/></svg></span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">Yolculuk</div>
+      <h2 class="serif">Deneyim & eğitim</h2>
+    </div>
+    <div class="timeline">
+      <div class="item reveal"><small>2023 — Günümüz</small><h3>Kıdemli Grafik Tasarımcı</h3><p>Ajans Adı · Marka kimliği ve kampanya tasarımlarına liderlik ediyorum.</p></div>
+      <div class="item reveal"><small>2020 — 2023</small><h3>Serbest Grafik Tasarımcı</h3><p>Girişimler ve yerel işletmeler için logo, ambalaj ve basılı tasarım yaptım.</p></div>
+      <div class="item reveal"><small>2016 — 2020</small><h3>Grafik Tasarım Bölümü</h3><p>Üniversite Adı · Tipografi, illüstrasyon ve görsel iletişim eğitimi.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="contact-box reveal">
+      <div>
+        <div class="eyebrow">İletişim</div>
+        <h2 class="serif" style="margin-bottom:0">Birlikte güzel bir şey tasarlayalım</h2>
+        <p>Markan için yeni bir kimlik ya da özel bir proje mi düşünüyorsun? Mesaj bırak, en kısa sürede döneyim.</p>
+        <div class="socials">
+          <a class="btn" href="mailto:merhaba@ornek.com"><svg><use href="#i-mail"/></svg> E-posta</a>
+          <a class="btn" href="#" target="_blank" rel="noopener">Behance</a>
+          <a class="btn" href="#" target="_blank" rel="noopener">Instagram</a>
         </div>
+      </div>
+      <form id="form">
+        <input type="text" id="name" placeholder="Adın" required>
+        <input type="email" id="email" placeholder="E-posta adresin" required>
+        <textarea id="msg" placeholder="Projeni kısaca anlat" required></textarea>
+        <button class="btn primary" type="submit">Mesajı Gönder</button>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
 
-        <!-- 2. KART: Profil / Özet Bilgi -->
-        <div class="bento-card rounded-3xl p-8 flex flex-col justify-between">
-            <div>
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-2xl font-bold mb-6">
-                    AS
-                </div>
-                <h2 class="text-lg font-semibold mb-1">Konum & Odak</h2>
-                <p class="text-zinc-400 text-sm">Türkiye • Uzaktan / Hibrit</p>
-            </div>
-            <div class="mt-6 pt-6 border-t border-zinc-800">
-                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-2">Sosyal Medya</p>
-                <div class="flex gap-4 text-sm font-medium text-zinc-300">
-                    <a href="https://linkedin.com" target="_blank" class="hover:text-indigo-400">LinkedIn ↗</a>
-                    <a href="https://github.com" target="_blank" class="hover:text-indigo-400">GitHub ↗</a>
-                    <a href="https://behance.net" target="_blank" class="hover:text-indigo-400">Behance ↗</a>
-                </div>
-            </div>
-        </div>
+<footer><div class="container">© <span id="year"></span> Ad Soyad · Grafik Tasarımcı</div></footer>
 
-        <!-- 3. KART: Yetenekler / Araçlar -->
-        <div class="bento-card rounded-3xl p-8">
-            <h2 class="text-lg font-semibold mb-4">Yetenekler & Araçlar</h2>
-            <div class="flex flex-wrap gap-2">
-                <span class="px-3 py-1.5 bg-zinc-800/80 text-zinc-300 rounded-lg text-xs">UI/UX Tasarım</span>
-                <span class="px-3 py-1.5 bg-zinc-800/80 text-zinc-300 rounded-lg text-xs">Figma</span>
-                <span class="px-3 py-1.5 bg-zinc-800/80 text-zinc-300 rounded-lg text-xs">HTML / CSS</span>
-                <span class="px-3 py-1.5 bg-zinc-800/80 text-zinc-300 rounded-lg text-xs">JavaScript</span>
-                <span class="px-3 py-1.5 bg-zinc-800/80 text-zinc-300 rounded-lg text-xs">Marka Kimliği</span>
-                <span class="px-3 py-1.5 bg-zinc-800/80 text-zinc-300 rounded-lg text-xs">Web Tasarım</span>
-            </div>
-        </div>
+<div id="lb"><img alt=""></div>
+<input type="file" id="picker" accept="image/*" hidden>
+<button class="icon-btn" id="top" aria-label="Yukarı çık"><svg><use href="#i-up"/></svg></button>
+<div id="toast"></div>
 
-        <!-- 4. KART: Öne Çıkan Proje 1 (2 Sütun Genişliğinde) -->
-        <div id="projeler" class="bento-card rounded-3xl p-8 md:col-span-2 flex flex-col justify-between">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <span class="text-xs text-indigo-400 font-semibold uppercase tracking-wider">Öne Çıkan Proje 01</span>
-                    <h3 class="text-xl font-bold mt-1">Proje Başlığı Buraya Gelecek</h3>
-                </div>
-                <a href="#" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs font-medium">İncele ↗</a>
-            </div>
-            <p class="text-zinc-400 text-sm leading-relaxed">
-                Bu projede hangi problemi çözdüğünü, hangi araçları kullandığını ve nasıl bir sonuç elde ettiğini 2-3 cümleyle burada özetleyebilirsin.
-            </p>
-        </div>
+<script>
+const $ = (s, c=document) => c.querySelector(s), $$ = (s, c=document) => [...c.querySelectorAll(s)];
 
-        <!-- 5. KART: Öne Çıkan Proje 2 -->
-        <div class="bento-card rounded-3xl p-8 md:col-span-2 flex flex-col justify-between">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <span class="text-xs text-emerald-400 font-semibold uppercase tracking-wider">Öne Çıkan Proje 02</span>
-                    <h3 class="text-xl font-bold mt-1">İkinci Proje Başlığı</h3>
-                </div>
-                <a href="#" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs font-medium">İncele ↗</a>
-            </div>
-            <p class="text-zinc-400 text-sm leading-relaxed">
-                İkinci projenin detaylarını, tasarımdaki rolünü ve kattığın değeri bu alana yazabilirsin.
-            </p>
-        </div>
+/* tema */
+const root = document.documentElement, themeBtn = $('#theme');
+let saved = null; try { saved = localStorage.getItem('theme'); } catch(e){}
+function setTheme(t){ root.dataset.theme = t; themeBtn.innerHTML = '<svg><use href="#' + (t === 'dark' ? 'i-sun' : 'i-moon') + '"/></svg>'; try{localStorage.setItem('theme',t)}catch(e){} }
+setTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+themeBtn.onclick = () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
 
-        <!-- 6. KART: İletişim Çağrısı -->
-        <div class="bento-card rounded-3xl p-8 bg-gradient-to-br from-indigo-950/50 to-zinc-900 flex flex-col justify-between">
-            <div>
-                <h3 class="text-lg font-bold mb-2">Birlikte Çalışalım</h3>
-                <p class="text-zinc-400 text-sm">Aklında bir proje mi var? Mesaj atmaktan çekinme.</p>
-            </div>
-            <a href="mailto:ornek@email.com" class="mt-6 inline-block text-center w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition">
-                Mail Gönder →
-            </a>
-        </div>
+/* mobil menü */
+$('#burger').onclick = () => $('#links').classList.toggle('open');
+$$('#links a').forEach(a => a.addEventListener('click', () => $('#links').classList.remove('open')));
 
-    </main>
+/* yazma efekti */
+const words = ['Grafik Tasarımcı', 'Marka Kimliği', 'Tipografi Tutkunu', 'İllüstratör'];
+let w = 0, c = 0, del = false;
+(function type(){
+  const word = words[w];
+  $('#type').textContent = word.slice(0, c);
+  if(!del && c === word.length){ del = true; return setTimeout(type, 1400); }
+  if(del && c === 0){ del = false; w = (w + 1) % words.length; }
+  c += del ? -1 : 1;
+  setTimeout(type, del ? 40 : 85);
+})();
 
-    <footer class="mt-10 text-zinc-600 text-xs">
-        © 2026 Adın Soyadın. Tüm hakları saklıdır.
-    </footer>
+/* scroll */
+const links = $$('#links a'), sections = links.map(a => $(a.getAttribute('href')));
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  $('#progress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  $('#top').classList.toggle('show', h.scrollTop > 600);
+  let idx = 0;
+  sections.forEach((s, i) => { if(s.getBoundingClientRect().top < 140) idx = i; });
+  links.forEach((a, i) => a.classList.toggle('active', i === idx));
+}, {passive:true});
+$('#top').onclick = () => scrollTo({top:0, behavior:'smooth'});
 
+const glow = $('#glow');
+addEventListener('pointermove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; }, {passive:true});
+
+/* reveal, sayaç, çubuklar */
+function countUp(el){
+  const target = +el.dataset.count, suf = el.dataset.suffix || '', t0 = performance.now(), dur = 1400;
+  (function step(t){
+    const p = Math.min((t - t0) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suf;
+    if(p < 1) requestAnimationFrame(step);
+  })(t0);
+}
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    e.target.classList.add('in');
+    $$('[data-count]', e.target).forEach(countUp);
+    $$('[data-w]', e.target).forEach(b => b.style.width = b.dataset.w + '%');
+    io.unobserve(e.target);
+  });
+}, {threshold:.15});
+$$('.reveal').forEach(el => io.observe(el));
+
+/* filtre */
+$$('.filter').forEach(btn => btn.addEventListener('click', () => {
+  $$('.filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  $$('.work').forEach(el => el.classList.toggle('hide', btn.dataset.f !== 'all' && el.dataset.c !== btn.dataset.f));
+}));
+
+/* FOTOĞRAF ALANLARI
+   1) data-file yolundaki dosya varsa otomatik yüklenir.
+   2) Yoksa boş alana tıklayıp bilgisayardan seçerek önizleme yapabilirsin. */
+const picker = $('#picker');
+let activeSlot = null;
+$$('.photo').forEach(slot => {
+  const img = $('img', slot), file = slot.dataset.file;
+  img.onload = () => slot.classList.add('has');
+  img.onerror = () => slot.classList.remove('has');
+  if(file) img.src = file;
+  slot.addEventListener('click', () => {
+    if(slot.classList.contains('has')){
+      $('#lb img').src = img.src; $('#lb').classList.add('open');
+    } else { activeSlot = slot; picker.click(); }
+  });
+});
+picker.addEventListener('change', () => {
+  const f = picker.files[0];
+  if(f && activeSlot){ $('img', activeSlot).src = URL.createObjectURL(f); toast('Önizleme eklendi. Kalıcı olması için dosyayı images klasörüne koy.'); }
+  picker.value = '';
+});
+$('#lb').onclick = () => $('#lb').classList.remove('open');
+addEventListener('keydown', e => { if(e.key === 'Escape') $('#lb').classList.remove('open'); });
+
+/* renk kopyala */
+$$('.swatch').forEach(s => s.addEventListener('click', () => {
+  try { navigator.clipboard.writeText(s.dataset.hex); } catch(e){}
+  toast(s.dataset.hex + ' kopyalandı');
+}));
+
+/* form */
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 3000); }
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const subject = encodeURIComponent('Portfolyo mesajı — ' + $('#name').value);
+  const body = encodeURIComponent($('#msg').value + '\n\n' + $('#name').value + ' (' + $('#email').value + ')');
+  location.href = `mailto:merhaba@ornek.com?subject=${subject}&body=${body}`;
+  toast('Teşekkürler! E-posta uygulaman açılıyor');
+  e.target.reset();
+});
+
+$('#year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
